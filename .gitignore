@@ -2,8 +2,10 @@ venv
 output*
 datasets
 *.pyc
-data
+dataset
+*.npz
 .mypy*
 .vscode
 __pycache__
+.DS_Store
 bert-it-1
