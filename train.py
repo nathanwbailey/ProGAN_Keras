@@ -70,8 +70,10 @@ def train_epochs(
         )
 
         # Train the discriminator on the real and fake samples
+        d_model.trainable = True
         d_loss1 = d_model.train_on_batch(x_real, y_real)
         d_loss2 = d_model.train_on_batch(x_fake, y_fake)
+        d_model.trainable = False
 
         # Generate some latent data
         z_input = generate_latent_points(latent_dim, n_batch)

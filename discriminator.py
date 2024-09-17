@@ -28,7 +28,7 @@ def add_discriminator_block(
         kernel_initializer=init,
         kernel_constraint=const,
     )(in_image)
-    d = keras.layers.LeakyReLU(alpha=0.2)(d)
+    d = keras.layers.LeakyReLU(negative_slope=0.2)(d)
 
     d = keras.layers.Conv2D(
         128,
@@ -37,7 +37,7 @@ def add_discriminator_block(
         kernel_initializer=init,
         kernel_constraint=const,
     )(d)
-    d = keras.layers.LeakyReLU(alpha=0.2)(d)
+    d = keras.layers.LeakyReLU(negative_slope=0.2)(d)
     d = keras.layers.Conv2D(
         128,
         3,
@@ -45,7 +45,7 @@ def add_discriminator_block(
         kernel_initializer=init,
         kernel_constraint=const,
     )(d)
-    d = keras.layers.LeakyReLU(alpha=0.2)(d)
+    d = keras.layers.LeakyReLU(negative_slope=0.2)(d)
 
     # Create a Downsample Layer
     d = keras.layers.AveragePooling2D(pool_size=2)(d)
@@ -115,7 +115,7 @@ def define_discriminator(
         kernel_initializer=init,
         kernel_constraint=const,
     )(in_image)
-    d = keras.layers.LeakyReLU(alpha=0.2)(d)
+    d = keras.layers.LeakyReLU(negative_slope=0.2)(d)
     d = MinibatchStdev()(d)
 
     d = keras.layers.Conv2D(
@@ -125,7 +125,7 @@ def define_discriminator(
         kernel_initializer=init,
         kernel_constraint=const,
     )(in_image)
-    d = keras.layers.LeakyReLU(alpha=0.2)(d)
+    d = keras.layers.LeakyReLU(negative_slope=0.2)(d)
 
     d = keras.layers.Conv2D(
         128,
@@ -134,7 +134,7 @@ def define_discriminator(
         kernel_initializer=init,
         kernel_constraint=const,
     )(in_image)
-    d = keras.layers.LeakyReLU(alpha=0.2)(d)
+    d = keras.layers.LeakyReLU(negative_slope=0.2)(d)
 
     # Dense Layer to classify
     d = keras.layers.Flatten()(d)

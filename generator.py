@@ -29,7 +29,7 @@ def add_generator_block(
         kernel_constraint=const,
     )(upsampling)
     g = PixelNormalization()(g)
-    g = keras.layers.LeakyReLU(alpha=0.2)(g)
+    g = keras.layers.LeakyReLU(negative_slope=0.2)(g)
     g = keras.layers.Conv2D(
         128,
         3,
@@ -38,7 +38,7 @@ def add_generator_block(
         kernel_constraint=const,
     )(g)
     g = PixelNormalization()(g)
-    g = keras.layers.LeakyReLU(alpha=0.2)(g)
+    g = keras.layers.LeakyReLU(negative_slope=0.2)(g)
 
     # Create a New Output layer (outputs the image)
     out_image = keras.layers.Conv2D(
@@ -93,7 +93,7 @@ def define_generator(
         kernel_constraint=const,
     )(g)
     g = PixelNormalization()(g)
-    g = keras.layers.LeakyReLU(alpha=0.2)(g)
+    g = keras.layers.LeakyReLU(negative_slope=0.2)(g)
 
     g = keras.layers.Conv2D(
         128,
@@ -103,7 +103,7 @@ def define_generator(
         kernel_constraint=const,
     )(g)
     g = PixelNormalization()(g)
-    g = keras.layers.LeakyReLU(alpha=0.2)(g)
+    g = keras.layers.LeakyReLU(negative_slope=0.2)(g)
 
     # Output Layer
     out_image = keras.layers.Conv2D(
