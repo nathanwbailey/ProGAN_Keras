@@ -9,3 +9,5 @@ dataset
 __pycache__
 .DS_Store
 bert-it-1
+models
+image_plots
