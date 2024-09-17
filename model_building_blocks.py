@@ -1,13 +1,17 @@
-from tensorflow import keras
-import tensorflow as tf
-from numpy.typing import NDArray
+"""Contains Building Blocks for the ProGAN Model."""
+
 from typing import Any
 
+import tensorflow as tf
+from numpy.typing import NDArray
+from tensorflow import keras
 
-class PixelNormalization(keras.layers.Layer):
+
+class PixelNormalization(keras.layers.Layer):  # type: ignore[misc]
     """Pixel Normalization Layer."""
 
-    def call(self, inputs: NDArray[Any]) -> NDArray[Any]:
+    def call(self, inputs: NDArray[Any]) -> tf.Tensor:
+        """Forward Pass."""
         values = inputs**2.0
         # Compute mean across the channel dimension
         # For each pixel, calculate the mean across all channels
@@ -19,8 +23,11 @@ class PixelNormalization(keras.layers.Layer):
         return normalized_pixels
 
 
-class MinibatchStdev(keras.layers.Layer):
+class MinibatchStdev(keras.layers.Layer):  # type: ignore[misc]
+    """Mini Batch Standard Deviation Layer."""
+
     def call(self, inputs: NDArray[Any]) -> tf.Tensor:
+        """Forward Pass."""
         # Take the mean across all the images in the batch
         # (1, H, W, C)
         mean = tf.math.reduce_mean(inputs, axis=0, keepdims=True)
@@ -29,6 +36,7 @@ class MinibatchStdev(keras.layers.Layer):
         # (1, H, W, C)
         mean_sq_diff = tf.math.reduce_mean(squ_diffs, axis=0, keepdims=True)
         mean_sq_diff += 1e-8
+        # Get the Stddev for each pixel across the batch
         stdev = tf.math.sqrt(mean_sq_diff)
 
         # Reduce all dims
@@ -40,12 +48,15 @@ class MinibatchStdev(keras.layers.Layer):
         return tf.concat([inputs, outputs], axis=-1)
 
 
-class WeightedSum(keras.layers.Add):
+class WeightedSum(keras.layers.Add):  # type: ignore[misc]
+    """Weighted Sum Layer."""
+
     def __init__(self, alpha: float = 0.0):
+        """Init Alpha as a TF Variable."""
         super().__init__()
         self.alpha = tf.Variable(alpha, trainable=False)
 
-    def _merge_function(self, inputs: NDArray[Any]) -> NDArray[Any]:
+    def _merge_function(self, inputs: NDArray[Any]) -> tf.Tensor:
         """Override the merge function of Add Layer."""
         assert len(inputs) == 2
         output = ((1.0 - self.alpha) * inputs[0]) + (self.alpha * inputs[1])
@@ -53,4 +64,5 @@ class WeightedSum(keras.layers.Add):
 
 
 def wasserstein_loss(y_true: NDArray[Any], y_pred: NDArray[Any]) -> tf.Tensor:
+    """Custom Wasserstein Loss Function."""
     return tf.math.reduce_mean(y_true * y_pred)

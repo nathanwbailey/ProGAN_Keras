@@ -38,14 +38,14 @@ def extract_face(
 def load_faces(directory: str, n_faces: int) -> NDArray[Any]:
     """Load all the faces from a dir of files."""
     model = mtcnn.mtcnn.MTCNN()
-    faces = [] # type: list[NDArray[Any]]
+    faces: list[NDArray[Any]] = []
 
     for filename in os.listdir(directory):
         pixels = load_image(directory + filename)
         face = extract_face(model, pixels)
         if face is None:
             continue
-        print(f'Found: {len(faces)} faces')
+        print(f"Found: {len(faces)} faces")
         faces.append(face)
         if len(faces) >= n_faces:
             break

@@ -7,10 +7,14 @@ def define_composite_model(
     discriminators: list[list[keras.models.Model]],
     generators: list[list[keras.models.Model]],
 ) -> list[keras.models.Model]:
-    model_list: list = []
-    for i in range( # pylint: disable=consider-using-enumerate
+    """Function to create the Overall ProGAN Model."""
+    model_list: list[list[keras.models.Model]] = []
+    for i in range(  # pylint: disable=consider-using-enumerate
         len(discriminators)
-    ):  
+    ):
+        # Loop through the generators/discriminators and create the 2 models.
+        # 0 indexed model is the straight through model
+        # 1 indexed model is the blended model
         g_models, d_models = generators[i], discriminators[i]
         d_models[0].trainable = False
         model1 = keras.Sequential()
