@@ -76,4 +76,4 @@ class WeightedSum(keras.layers.Add):  # type: ignore[misc]
 
 def wasserstein_loss(y_true: NDArray[Any], y_pred: NDArray[Any]) -> tf.Tensor:
     """Custom Wasserstein Loss Function."""
-    return tf.math.reduce_mean(y_true * y_pred)
+    return -tf.math.reduce_mean(y_true * y_pred)
