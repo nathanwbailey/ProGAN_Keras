@@ -13,7 +13,7 @@ def load_real_samples(filename: str) -> NDArray[np.float32]:
     x = data["arr_0"]
     x = x.astype("float32")
     x = (x - 127.5) / 127.5
-    return x  # type: ignore[no-any-return]
+    return x[:1000]  # type: ignore[no-any-return]
 
 
 def generate_real_samples(

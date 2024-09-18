@@ -60,7 +60,7 @@ def train_epochs(
     for i in range(n_steps):
         # Update alpha if needed
         if fadein:
-            update_fadein([g_model, d_model, gan_model], i, n_steps)
+            update_fadein([g_model, d_model], i, n_steps)
 
         # Generate a half batch of real samples
         x_real, y_real = generate_real_samples(dataset, half_batch)
@@ -127,7 +127,7 @@ def train(
         [g_normal, g_fadein] = g_models[i]
         [d_normal, d_fadein] = d_models[i]
         [gan_normal, gan_fadein] = gan_models[i]
-
+        #gan_fadein.summary(expand_nested=True, show_trainable=True)
         gen_shape = g_normal.output_shape
         # Scale the dataset to the required new output
         scaled_data = scale_dataset(dataset, gen_shape[1:])

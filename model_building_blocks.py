@@ -22,6 +22,10 @@ class PixelNormalization(keras.layers.Layer):  # type: ignore[misc]
         normalized_pixels = inputs / l2
         return normalized_pixels
 
+    def compute_output_shape(self, input_shape: tuple[int, int, int]) -> tuple[int, int, int]:
+        """Compute Output Shape."""
+        return input_shape
+
 
 class MinibatchStdev(keras.layers.Layer):  # type: ignore[misc]
     """Mini Batch Standard Deviation Layer."""
@@ -47,6 +51,13 @@ class MinibatchStdev(keras.layers.Layer):  # type: ignore[misc]
         # Add another channel dim
         return tf.concat([inputs, outputs], axis=-1)
 
+    def compute_output_shape(self, input_shape: tuple[int, ...]) -> tuple[int, ...]:
+        """Compute Output Shape."""
+        in_shape = list(input_shape)
+        in_shape[-1] += 1
+        return tuple(in_shape)
+
+
 
 class WeightedSum(keras.layers.Add):  # type: ignore[misc]
     """Weighted Sum Layer."""
@@ -56,7 +67,7 @@ class WeightedSum(keras.layers.Add):  # type: ignore[misc]
         super().__init__()
         self.alpha = tf.Variable(alpha, trainable=False)
 
-    def _merge_function(self, inputs: NDArray[Any]) -> tf.Tensor:
+    def _merge_function(self, inputs: list[tf.Tensor]) -> tf.Tensor:
         """Override the merge function of Add Layer."""
         assert len(inputs) == 2
         output = ((1.0 - self.alpha) * inputs[0]) + (self.alpha * inputs[1])
